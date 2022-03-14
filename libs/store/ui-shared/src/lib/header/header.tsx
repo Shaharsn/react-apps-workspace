@@ -13,16 +13,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 /* eslint-disable-next-line */
-export interface HeaderProps {}
+export interface HeaderProps {
+  title: string;
+}
 
 export function Header(props: HeaderProps) {
+  const { title } = props;
   const styles = useStyles();
 
   return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" className={styles.title}>
-          Borad Game Hoard{' '}
+          {title}
         </Typography>
       </Toolbar>
     </AppBar>
