@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import {
   Card,
   CardActionArea,
@@ -7,23 +10,15 @@ import {
 } from '@material-ui/core';
 import { formatRating } from '@react-apps-workspace/store/util-formatters';
 import { Game } from 'libs/api/util-interfaces/src';
-import { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import './store-feature-game-detail.scss';
-
-type TParams = { id: string };
 
 interface IState {
   data: Game | null;
   loadingState: 'success' | 'error' | 'loading';
 }
 
-/* eslint-disable-next-line */
-export interface StoreFeatureGameDetailProps
-  extends RouteComponentProps<TParams> {}
-
-export const StoreFeatureGameDetail = (props: StoreFeatureGameDetailProps) => {
-  const { match } = props;
+export const StoreFeatureGameDetail = () => {
+  const params = useParams();
 
   const [state, setState] = useState<IState>({
     data: null,
@@ -32,19 +27,23 @@ export const StoreFeatureGameDetail = (props: StoreFeatureGameDetailProps) => {
 
   // gathering the games data from the Express server
   useEffect(() => {
-    const gameId = match.params.id;
+    const gameId = params['id'];
 
     setState({ ...state, loadingState: 'loading' });
+    console.log(state);
 
     fetch(`/api/game/${gameId}`)
       .then((x) => x.json())
       .then((res) => {
+        console.log(res);
+        console.log(res.image);
+
         setState({ ...state, data: res, loadingState: 'success' });
       })
       .catch((err) => {
         setState({ ...state, loadingState: 'error' });
       });
-  }, [match.params.id]);
+  }, [params]);
 
   return (
     <div className="container">
